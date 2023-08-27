@@ -1,5 +1,6 @@
 import { IHttpRequest, IHttpResponse } from "../protocols/http.interfaces";
 import { MissingParamError } from "../errors/missing-param-error";
+import { badRequest } from "../helpers/http-helper";
 
 export class SignUpController {
   handle(httpRequest: IHttpRequest): IHttpResponse {
@@ -7,10 +8,7 @@ export class SignUpController {
 
     for (const field of requiredFields) {
       if (!httpRequest.body[field]) {
-        return {
-          statusCode: 400,
-          body: new MissingParamError(field),
-        };
+        return badRequest(new MissingParamError(field));
       }
     }
 
