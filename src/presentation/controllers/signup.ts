@@ -1,7 +1,10 @@
+import { IHttpRequest, IHttpResponse } from "../protocols/http.interfaces";
+
 export class SignUpController {
-  handle(httpRequest: any): any {
-    const requiredFileds = ["name", "email"];
-    for (const field of requiredFileds) {
+  handle(httpRequest: IHttpRequest): IHttpResponse {
+    const requiredFields = ["name", "email"];
+
+    for (const field of requiredFields) {
       if (!httpRequest.body[field]) {
         return {
           statusCode: 400,
@@ -9,5 +12,11 @@ export class SignUpController {
         };
       }
     }
+
+    // If all required fields are present, you need to provide a response
+    return {
+      statusCode: 200,
+      body: "Success",
+    };
   }
 }
