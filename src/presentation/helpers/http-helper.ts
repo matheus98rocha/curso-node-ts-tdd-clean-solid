@@ -1,4 +1,4 @@
-import { IHttpResponse } from "../protocols/http.interfaces";
+import { IHttpResponse } from "../protocols/http.interface";
 
 export const badRequest = (error: Error): IHttpResponse => {
   return {
