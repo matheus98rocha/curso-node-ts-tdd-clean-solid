@@ -1,9 +1,8 @@
 import { IHttpRequest, IHttpResponse } from "../protocols/http.interface";
-import { MissingParamError } from "../errors/missing-param-error";
+import { InvalidParamError, MissingParamError } from "../errors";
 import { badRequest, serverError } from "../helpers/http-helper";
 import { ControllerInterface } from "../protocols/controller.interface";
 import { EmailValidatorInterface } from "../protocols/email-validator.interface";
-import { ServerError } from "../errors/server-error";
 
 export class SignUpController implements ControllerInterface {
   private readonly emailValidator: EmailValidatorInterface;
@@ -27,9 +26,8 @@ export class SignUpController implements ControllerInterface {
       }
 
       const isValid = this.emailValidator.isValid(httpRequest.body.email);
-      console.log(isValid);
       if (!isValid) {
-        return badRequest(new MissingParamError("email"));
+        return badRequest(new InvalidParamError("email"));
       }
 
       // If all required fields are present, you need to provide a response
