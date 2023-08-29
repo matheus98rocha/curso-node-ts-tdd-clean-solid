@@ -7,13 +7,28 @@ interface SutInterface {
   emailValidatorStub: EmailValidatorInterface;
 }
 
-const makeSut = (): SutInterface => {
+const makeEmailValidator = (): EmailValidatorInterface => {
   class EmailValidatorStub implements EmailValidatorInterface {
     isValid(email: string): boolean {
       return true;
     }
   }
   const emailValidatorStub = new EmailValidatorStub();
+  return emailValidatorStub;
+};
+
+const makeEmailValidatorWithError = (): EmailValidatorInterface => {
+  class EmailValidatorStub implements EmailValidatorInterface {
+    isValid(email: string): boolean {
+      throw new Error();
+    }
+  }
+  const emailValidatorStub = new EmailValidatorStub();
+  return emailValidatorStub;
+};
+
+const makeSut = (): SutInterface => {
+  const emailValidatorStub = makeEmailValidator();
   const sut = new SignUpController(emailValidatorStub);
   return {
     sut,
@@ -110,12 +125,7 @@ describe("SignUp Controller", () => {
     expect(isValidSpy).toHaveBeenCalledWith("any_email@mail.com");
   });
   test("Should return 500 if email validator throws error 500", () => {
-    class EmailValidatorStub implements EmailValidatorInterface {
-      isValid(email: string): boolean {
-        throw new Error();
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub();
+    const emailValidatorStub = makeEmailValidatorWithError();
     const sut = new SignUpController(emailValidatorStub);
 
     const httpRequest = {
