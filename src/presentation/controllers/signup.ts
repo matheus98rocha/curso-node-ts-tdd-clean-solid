@@ -2,12 +2,18 @@ import { IHttpRequest, IHttpResponse, ControllerInterface } from "../protocols";
 import { InvalidParamError, MissingParamError } from "../errors";
 import { badRequest, serverError } from "../helpers/http-helper";
 import { EmailValidatorInterface } from "../protocols/email-validator.interface";
+import { AddAccountInterface } from "../../domain/usecases/add-account";
 
 export class SignUpController implements ControllerInterface {
   private readonly emailValidator: EmailValidatorInterface;
+  private readonly addAccount: AddAccountInterface;
 
-  constructor(emailValidator: EmailValidatorInterface) {
+  constructor(
+    emailValidator: EmailValidatorInterface,
+    addAccount: AddAccountInterface
+  ) {
     this.emailValidator = emailValidator;
+    this.addAccount = addAccount;
   }
   handle(httpRequest: IHttpRequest): IHttpResponse {
     try {
@@ -23,7 +29,7 @@ export class SignUpController implements ControllerInterface {
           return badRequest(new MissingParamError(field));
         }
       }
-      const { email, password, passwordConfirmation } = httpRequest.body;
+      const { name, email, password, passwordConfirmation } = httpRequest.body;
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError("passwordConfirmation"));
       }
@@ -34,6 +40,12 @@ export class SignUpController implements ControllerInterface {
       }
 
       // If all required fields are present, you need to provide a response
+      this.addAccount.add({
+        name,
+        email,
+        password,
+      });
+
       return {
         statusCode: 200,
         body: "Success",
