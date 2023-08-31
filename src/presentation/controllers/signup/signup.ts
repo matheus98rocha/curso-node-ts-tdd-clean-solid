@@ -44,7 +44,7 @@ export class SignUpController implements ControllerInterface {
       }
 
       // If all required fields are present, you need to provide a response
-      this.addAccount.add({
+      const addedAccount = this.addAccount.add({
         name,
         email,
         password,
@@ -52,7 +52,7 @@ export class SignUpController implements ControllerInterface {
 
       return {
         statusCode: 200,
-        body: "Success",
+        body: addedAccount,
       };
     } catch (error) {
       return serverError();
