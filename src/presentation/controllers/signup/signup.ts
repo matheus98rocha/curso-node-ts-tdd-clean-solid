@@ -23,7 +23,7 @@ export class SignUpController implements ControllerInterface {
     this.emailValidator = emailValidator;
     this.addAccount = addAccount;
   }
-  handle(httpRequest: IHttpRequest): IHttpResponse {
+ async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
     try {
       const requiredFields = [
         "name",
@@ -48,7 +48,7 @@ export class SignUpController implements ControllerInterface {
       }
 
       // If all required fields are present, you need to provide a response
-      const addedAccount = this.addAccount.add({
+      const addedAccount = await this.addAccount.add({
         name,
         email,
         password,
