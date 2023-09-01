@@ -23,7 +23,7 @@ export class SignUpController implements ControllerInterface {
     this.emailValidator = emailValidator;
     this.addAccount = addAccount;
   }
- async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
+  async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
     try {
       const requiredFields = [
         "name",
@@ -56,6 +56,7 @@ export class SignUpController implements ControllerInterface {
 
       return sucessResponse(addedAccount);
     } catch (error) {
+      console.error(error);
       return serverError();
     }
   }
